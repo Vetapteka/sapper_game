@@ -1,0 +1,5 @@
+{
+    "typescript.format.insertSpaceAfterConstructor": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+    "typescript.inlayHints.enumMemberValues.enabled": true
+}
