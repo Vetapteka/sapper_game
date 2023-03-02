@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import Footer from './Footer';
 import Header from './Header';
-import { Main } from './Main';
+import Main from './Main';
 
 interface Props {
     children?: ReactNode;

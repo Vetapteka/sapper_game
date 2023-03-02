@@ -6,12 +6,12 @@ const Content = styled.div`
     justify-content: space-around;
 `;
 
-const Header = () => {
+const Header: React.FC = () => {
     return (
         <header>
             <Container>
                 <Content>
-                    <h1>SAPER</h1>
+                    <h1>SAPPER</h1>
                     <button>change theme</button>
                 </Content>
             </Container>

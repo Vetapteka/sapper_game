@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container } from './Container';
 import styled from 'styled-components';
 import { CODE_URL, GIT_URL } from '../../global';
@@ -11,13 +12,13 @@ const Content = styled.div`
     padding: 10px;
     border-radius: 10px;
     justify-content: space-around;
-    color: grey;
+    color: black;
 `;
 
 const Link = styled.a`
     color: inherit;
 `;
-const Footer = () => {
+const Footer: React.FC = () => {
     return (
         <StyledFooter>
             <Container>
