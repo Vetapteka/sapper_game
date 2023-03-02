@@ -1,9 +1,9 @@
 import { Coordinates } from './Coordinates';
-import { MultipleArray } from './MultipleArray';
+import { NumberMultipleArray } from './MultipleArray';
 import { getRandomIndex } from './tools';
 
 export class GameField {
-    _field: MultipleArray;
+    _field: NumberMultipleArray;
     _bombCount: number;
     _x: number;
     _y: number;
@@ -18,12 +18,12 @@ export class GameField {
         this._bombCount = bombCount;
         this._x = x;
         this._y = y;
-        this._field = new MultipleArray(x, y);
+        this._field = new NumberMultipleArray(x, y, 0);
         this._getNeighboursCoords =
             this._getNeighboursCoordPattern(neighbourRadius);
     }
 
-    get field(): MultipleArray {
+    get field(): NumberMultipleArray {
         return this._field;
     }
 
