@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import Tile, { TileData, TileRef, TileRole } from './tile/Tile';
+import Tile, { TileRef } from './Tile';
 import { GameField } from './tools/GameField';
 
 const x = 16;
@@ -19,7 +19,8 @@ const Game = () => {
                 <Tile
                     key={i}
                     ref={(el) => (tileRefs.current[i] = el)}
-                    onClick={handleTileClick}
+                    onLeftClick={handleLeftClick}
+                    onRightClick={handleRightClick}
                     data={{ index: i, role: '0' }}
                 />
             );
@@ -27,19 +28,26 @@ const Game = () => {
         return tiles;
     };
 
-    const handleTileClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (isFirstClick) {
             initTiles();
             isFirstClick = false;
         }
 
+        const tile = getTileByClick(event);
+        tile?.handleOpen();
+    };
+
+    const getTileByClick = (
+        event: React.MouseEvent<HTMLDivElement>
+    ): null | TileRef => {
         const target = event.target as HTMLDivElement;
         const index = target.dataset.index;
-        console.log(index);
-
-        if (typeof index !== 'undefined') {
-            tileRefs.current[+index]?.handleOpen();
-        }
+        return typeof index !== 'undefined' ? tileRefs.current[+index] : null;
     };
 
     const initTiles = () => {
@@ -49,9 +57,9 @@ const Game = () => {
 
         const filedLine = field.getValuesInLine();
 
-            tileRefs.current.forEach((ref, index) => {
-                ref?.setTileRole(filedLine[index]);
-            });
+        tileRefs.current.forEach((ref, index) => {
+            ref?.setTileRole(filedLine[index]);
+        });
     };
 
     return <>{createTiles()}</>;

@@ -1,20 +1,18 @@
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
-import mineImage from '../../../assets/mine.png';
-import oneNumber from '../../../assets/1.png';
-import twoNumber from '../../../assets/2.png';
-import threeNumber from '../../../assets/3.png';
-import fourNumber from '../../../assets/4.png';
-import fiveNumber from '../../../assets/5.png';
-import sixNumber from '../../../assets/6.png';
-import sevenNumber from '../../../assets/7.png';
-import empty from '../../../assets/7.png';
-
+import mineImage from '../../assets/mine.png';
+import oneNumber from '../../assets/1.png';
+import twoNumber from '../../assets/2.png';
+import threeNumber from '../../assets/3.png';
+import fourNumber from '../../assets/4.png';
+import fiveNumber from '../../assets/5.png';
+import sixNumber from '../../assets/6.png';
+import sevenNumber from '../../assets/7.png';
 
 type TileRoleType = keyof typeof TileRole;
 
 export const TileRole = {
-    '0': empty,
+    '0': null,
     '-1': mineImage,
     '1': oneNumber,
     '2': twoNumber,
@@ -56,7 +54,8 @@ const Open = styled.div<OpenProps>`
 `;
 
 interface TileProps {
-    onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onLeftClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onRightClick: (event: React.MouseEvent<HTMLDivElement>) => void;
     data: TileData;
 }
 
@@ -70,34 +69,31 @@ export interface TileRef {
     setTileRole: (role: TileRoleType) => void;
 }
 
-const Tile = forwardRef<TileRef, TileProps>(({ onClick, data }, ref) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const [role, setRole] = useState<TileRoleType>(data.role);
+const Tile = forwardRef<TileRef, TileProps>(
+    ({ onLeftClick, onRightClick, data }, ref) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [role, setRole] = useState<TileRoleType>(data.role);
 
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        onClick(event);
-    };
+        useImperativeHandle(ref, () => ({
+            handleOpen: () => {
+                setIsOpen(true);
+            },
 
-    useImperativeHandle(ref, () => ({
-        handleOpen: () => {
-            setIsOpen(true);
-        },
+            setTileRole: (role) => {
+                setRole(role);
+            },
+        }));
 
-        setTileRole: (role) => {
-            setRole(role);
-        },
-    }));
-
-    return (
-        <Content onClick={handleClick}>
-            {isOpen ? (
-                <Open data-index={data.index} role={role} />
-            ) : (
-                <Closed data-index={data.index} role={role} />
-            )}
-        </Content>
-    );
-});
+        return (
+            <Content onClick={onLeftClick} onContextMenu={onRightClick}>
+                {isOpen ? (
+                    <Open data-index={data.index} role={role} />
+                ) : (
+                    <Closed data-index={data.index} role={role} />
+                )}
+            </Content>
+        );
+    }
+);
 
 export default Tile;
