@@ -1,11 +1,11 @@
-import React from 'react';
+import { useState } from 'react';
 
-const BombCounter = () => {
-    return (
-        <div>
-            bomb count
-        </div>
-    );
+interface BombCouterProps {
+    bombCount: number;
+}
+
+const BombCounter = ({ bombCount }: BombCouterProps) => {
+    return <div>{bombCount}</div>;
 };
 
 export default BombCounter;
