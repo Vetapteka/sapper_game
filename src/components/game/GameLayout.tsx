@@ -1,18 +1,28 @@
 import Game from './Game';
 import styled from 'styled-components';
+import BombCounter from './BombCounter';
+import SmileButton from './SmileButton';
+import Timer from './Timer';
 
-const Grid = styled.div`
-    display: grid;
-    margin: 0 auto;
-    grid-template-columns: repeat(16, 30px);
-    grid-template-rows: repeat(16, 30px);
+const Content = styled.div`
+    background-color: antiquewhite;
+`;
+
+const Panel = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 const GameLayout = () => {
     return (
-        <Grid>
+        <Content>
+            <Panel>
+                <BombCounter />
+                <SmileButton />
+                <Timer />
+            </Panel>
             <Game />
-        </Grid>
+        </Content>
     );
 };
 
