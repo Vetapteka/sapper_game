@@ -84,6 +84,7 @@ export interface TileData {
 
 export interface TileRef {
     open: () => void;
+    getIndex: () => number;
     getRightClickCount: () => React.MutableRefObject<number>;
 
     setTileOpenedRole: (role: TileOpenedRoleType) => void;
@@ -103,6 +104,10 @@ const Tile = forwardRef<TileRef, TileProps>(
         const rightClickCount = useRef(0);
 
         useImperativeHandle(ref, () => ({
+            getIndex: () => {
+                return data.index;
+            },
+
             open: () => {
                 setIsOpen(true);
             },

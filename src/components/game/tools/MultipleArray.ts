@@ -9,6 +9,17 @@ export class MultipleArray {
         this.isExist = this._getIsExistFunction(x, y);
     }
 
+    static getCoordsByLineCoords(value: number, x: number): Coordinates {
+        return { x: value % x, y: Math.floor(value / x) };
+    }
+
+    static getLineCoordsByCoords(
+        coords: Coordinates,
+        x: number,
+    ): number {
+        return coords.y * x + coords.x;
+    }
+
     _createArray(x: number, y: number, defaultValue: any): Array<Array<any>> {
         const array = [];
         for (let i: number = 0; i < y; i++) {
@@ -29,6 +40,16 @@ export class MultipleArray {
 
     setValue(coords: Coordinates, value: any) {
         this._array[coords.y][coords.x] = value;
+    }
+
+    getValuesInLine(): Array<any> {
+        const aaa = new Array<any>();
+
+        this._array.forEach((array) => {
+            array.forEach((el) => aaa.push(el));
+        });
+
+        return aaa;
     }
 }
 

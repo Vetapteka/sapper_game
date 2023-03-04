@@ -1,6 +1,8 @@
 import { useRef } from 'react';
 import Tile, { TileRef } from './Tile';
 import { GameField } from './tools/GameField';
+import styled from 'styled-components';
+import { MultipleArray } from './tools/MultipleArray';
 
 const x = 16;
 const y = 16;
@@ -9,8 +11,16 @@ const bombRadius = 1;
 
 let isFirstClick = true;
 
+const Grid = styled.div`
+    display: grid;
+    margin: 0 auto;
+    grid-template-columns: repeat(16, 30px);
+    grid-template-rows: repeat(16, 30px);
+`;
+
 const Game = () => {
     const tileRefs = useRef<Array<TileRef>>([]);
+    const gameField = new GameField(bombCount, x, y, bombRadius);
 
     const createTiles = () => {
         const tiles = [];
@@ -31,7 +41,7 @@ const Game = () => {
     const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
 
-        const tile = getTileByClick(event);
+        const tile = getTileByIndex(getTileIndexByClick(event));
         const clickCounter = tile.getRightClickCount();
         const clickCount = clickCounter.current;
 
@@ -48,28 +58,44 @@ const Game = () => {
     };
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        const tileIndex = getTileIndexByClick(event);
+
         if (isFirstClick) {
-            initTiles();
+            initTiles(tileIndex);
             isFirstClick = false;
         }
 
-        getTileByClick(event)?.open();
+        const tile = getTileByIndex(tileIndex);
+
+        const tileCoord = MultipleArray.getCoordsByLineCoords(
+            tile.getIndex(),
+            x
+        );
+
+        const openedCoords = gameField.getUnlockedCoords(tileCoord);
+
+        openedCoords.forEach((coords) => {
+            const index = MultipleArray.getLineCoordsByCoords(coords, x);
+            tileRefs.current[index].open();
+        });
     };
 
-    const getTileByClick = (
-        event: React.MouseEvent<HTMLDivElement>
-    ): TileRef => {
+    const getTileIndexByClick = (event: React.MouseEvent<HTMLDivElement>) => {
         const target = event.target as HTMLDivElement;
         const index = target.dataset.index || '0';
-
-        return tileRefs.current[+index];
+        return +index;
     };
 
-    const initTiles = () => {
-        const gameField = new GameField(bombCount, x, y, bombRadius);
-        gameField.fillField();
-        const field = gameField.field;
+    const getTileByIndex = (index: number): TileRef => {
+        return tileRefs.current[index];
+    };
 
+    const initTiles = (firstClickTileIndex: number) => {
+        gameField.fillField(
+            MultipleArray.getCoordsByLineCoords(firstClickTileIndex, x)
+        );
+
+        const field = gameField.field;
         const filedLine = field.getValuesInLine();
 
         tileRefs.current.forEach((ref, index) => {
@@ -77,7 +103,7 @@ const Game = () => {
         });
     };
 
-    return <>{createTiles()}</>;
+    return <Grid>{createTiles()}</Grid>;
 };
 
 export default Game;
