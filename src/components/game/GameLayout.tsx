@@ -1,8 +1,5 @@
-import Game from './Game';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
-import BombCounter from './BombCounter';
-import SmileButton from './SmileButton';
-import Timer from './Timer';
 
 const Content = styled.div`
     background-color: antiquewhite;
@@ -13,15 +10,27 @@ const Panel = styled.div`
     justify-content: space-between;
 `;
 
-const GameLayout = () => {
+interface GameLayoutProps {
+    game: ReactNode;
+    bombCounter: ReactNode;
+    smileButton: ReactNode;
+    timer: ReactNode;
+}
+
+const GameLayout = ({
+    game,
+    bombCounter,
+    smileButton,
+    timer,
+}: GameLayoutProps) => {
     return (
         <Content>
             <Panel>
-                <BombCounter />
-                <SmileButton />
-                <Timer />
+                {bombCounter}
+                {smileButton}
+                {timer}
             </Panel>
-            <Game />
+            {game}
         </Content>
     );
 };

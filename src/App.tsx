@@ -2,14 +2,14 @@ import Layout from './components/layout/Layout';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyle';
 import future from './styles/themes/future';
-import GameLayout from './components/game/GameLayout';
+import Game from './components/game/Game';
 
 const App = () => {
     return (
         <ThemeProvider theme={future}>
             <GlobalStyle />
             <Layout>
-                <GameLayout />
+                <Game />
             </Layout>
         </ThemeProvider>
     );
