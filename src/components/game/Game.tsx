@@ -1,7 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Tile, { TileRef } from './Tile';
 import { GameManager } from './tools/GameManager';
 import styled from 'styled-components';
+import GameLayout from './GameLayout';
+import BombCounter from './BombCounter';
+import Timer, { TimerRef } from './Timer';
+import SmileButton from './SmileButton';
 
 const x = 16;
 const y = 16;
@@ -16,10 +20,20 @@ const Grid = styled.div`
 `;
 
 const Game = () => {
+    const timerRef = useRef<TimerRef>(null);
+
     const isFirstClick = useRef(true);
     const tileRefs = useRef<Array<TileRef>>([]);
     const gameManager = new GameManager(bombCount, x, y, bombRadius);
     const field = gameManager.getField();
+
+    const [flagsCount, setFlagsCount] = useState(bombCount);
+
+    const startGame = (tileIndex: number) => {
+        initTiles(tileIndex);
+        timerRef.current?.start();
+        isFirstClick.current = false;
+    };
 
     const createTiles = () => {
         const tiles = [];
@@ -47,11 +61,13 @@ const Game = () => {
         if (clickCount == 0) {
             tile.setTileClosedRole('flag');
             clickCountRef.current++;
+            setFlagsCount((prev) => prev - 1);
         } else if (clickCount == 1) {
             tile.setTileClosedRole('question');
             clickCountRef.current++;
         } else if (clickCount == 2) {
             tile.setTileClosedRole('empty');
+            setFlagsCount((prev) => prev + 1);
             clickCountRef.current = 0;
         }
     };
@@ -60,8 +76,7 @@ const Game = () => {
         const tileIndex = getTileIndexByClick(event);
 
         if (isFirstClick.current) {
-            initTiles(tileIndex);
-            isFirstClick.current = false;
+            startGame(tileIndex);
         }
 
         const tile = getTileByIndex(tileIndex);
@@ -93,7 +108,14 @@ const Game = () => {
         });
     };
 
-    return <Grid>{createTiles()}</Grid>;
+    return (
+        <GameLayout
+            game={<Grid>{createTiles()}</Grid>}
+            bombCounter={<BombCounter bombCount={flagsCount} />}
+            timer={<Timer ref={timerRef} />}
+            smileButton={<SmileButton />}
+        />
+    );
 };
 
 export default Game;
