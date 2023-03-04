@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import GameLayout from './GameLayout';
 import BombCounter from './BombCounter';
 import Timer, { TimerRef } from './Timer';
-import SmileButton from './SmileButton';
+import SmileButton, { SmileButtonRef } from './SmileButton';
 
 const x = 16;
 const y = 16;
@@ -21,6 +21,19 @@ const Grid = styled.div`
 
 const Game = () => {
     const timerRef = useRef<TimerRef>(null);
+    const smileButtonRef = useRef<SmileButtonRef>(null);
+
+    const isMouseDownRef = useRef(false);
+
+    const handleMouseDown = () => {
+        isMouseDownRef.current = true;
+        smileButtonRef.current?.setRole('wonder');
+    };
+
+    const handleMouseUp = () => {
+        isMouseDownRef.current = false;
+        smileButtonRef.current?.setRole('default');
+    };
 
     const isFirstClick = useRef(true);
     const tileRefs = useRef<Array<TileRef>>([]);
@@ -110,10 +123,14 @@ const Game = () => {
 
     return (
         <GameLayout
-            game={<Grid>{createTiles()}</Grid>}
+            game={
+                <Grid onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+                    {createTiles()}
+                </Grid>
+            }
             bombCounter={<BombCounter bombCount={flagsCount} />}
             timer={<Timer ref={timerRef} />}
-            smileButton={<SmileButton />}
+            smileButton={<SmileButton ref={smileButtonRef} />}
         />
     );
 };
