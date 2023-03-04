@@ -84,6 +84,7 @@ export interface TileData {
 
 export interface TileRef {
     open: () => void;
+    isOpened: () => boolean;
     getIndex: () => number;
     getRightClickCount: () => React.MutableRefObject<number>;
 
@@ -93,7 +94,7 @@ export interface TileRef {
 
 const Tile = forwardRef<TileRef, TileProps>(
     ({ onLeftClick, onRightClick, data }, ref) => {
-        const [isOpen, setIsOpen] = useState(false);
+        const [isOpened, setIsOpened] = useState(false);
         const [openedRole, setOpenedRole] = useState<TileOpenedRoleType>(
             data.openedRole
         );
@@ -104,30 +105,21 @@ const Tile = forwardRef<TileRef, TileProps>(
         const rightClickCount = useRef(0);
 
         useImperativeHandle(ref, () => ({
-            getIndex: () => {
-                return data.index;
-            },
+            getIndex: () => data.index,
 
-            open: () => {
-                setIsOpen(true);
-            },
+            isOpened: () => isOpened,
 
-            getRightClickCount: () => {
-                return rightClickCount;
-            },
+            open: () => setIsOpened(true),
 
-            setTileOpenedRole: (role) => {
-                setOpenedRole(role);
-            },
+            getRightClickCount: () => rightClickCount,
 
-            setTileClosedRole: (role) => {
-                setClosedRole(role);
-            },
+            setTileOpenedRole: (role) => setOpenedRole(role),
+            setTileClosedRole: (role) => setClosedRole(role),
         }));
 
         return (
             <Content onClick={onLeftClick} onContextMenu={onRightClick}>
-                {isOpen ? (
+                {isOpened ? (
                     <Open data-index={data.index} openedRole={openedRole} />
                 ) : (
                     <Closed data-index={data.index} closedRole={closedRole} />

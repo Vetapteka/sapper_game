@@ -68,20 +68,23 @@ const Game = () => {
         event.preventDefault();
 
         const tile = getTileByIndex(getTileIndexByClick(event));
-        const clickCountRef = tile.getRightClickCount();
-        const clickCount = clickCountRef.current;
 
-        if (clickCount == 0) {
-            tile.setTileClosedRole('flag');
-            clickCountRef.current++;
-            setFlagsCount((prev) => prev - 1);
-        } else if (clickCount == 1) {
-            tile.setTileClosedRole('question');
-            clickCountRef.current++;
-        } else if (clickCount == 2) {
-            tile.setTileClosedRole('empty');
-            setFlagsCount((prev) => prev + 1);
-            clickCountRef.current = 0;
+        if (!tile.isOpened()) {
+            const clickCountRef = tile.getRightClickCount();
+            const clickCount = clickCountRef.current;
+
+            if (clickCount == 0) {
+                tile.setTileClosedRole('flag');
+                clickCountRef.current++;
+                setFlagsCount((prev) => prev - 1);
+            } else if (clickCount == 1) {
+                tile.setTileClosedRole('question');
+                clickCountRef.current++;
+            } else if (clickCount == 2) {
+                tile.setTileClosedRole('empty');
+                setFlagsCount((prev) => prev + 1);
+                clickCountRef.current = 0;
+            }
         }
     };
 
