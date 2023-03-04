@@ -1,26 +1,29 @@
 import { Coordinates } from './Coordinates';
 
 export class MultipleArray {
-    _array: Array<Array<any>>;
+    protected array: Array<Array<any>>;
+    protected x: number;
     isExist;
 
     constructor(x: number, y: number, defaultValue: any) {
-        this._array = this._createArray(x, y, defaultValue);
-        this.isExist = this._getIsExistFunction(x, y);
+        this.array = this.createArray(x, y, defaultValue);
+        this.x = x;
+        this.isExist = this.getIsExistFunction(x, y);
     }
 
-    static getCoordsByLineCoords(value: number, x: number): Coordinates {
-        return { x: value % x, y: Math.floor(value / x) };
+    getCoordsByLineCoords(value: number): Coordinates {
+        return { x: value % this.x, y: Math.floor(value / this.x) };
     }
 
-    static getLineCoordsByCoords(
-        coords: Coordinates,
+    getLineCoordsByCoords(coords: Coordinates): number {
+        return coords.y * this.x + coords.x;
+    }
+
+    private createArray(
         x: number,
-    ): number {
-        return coords.y * x + coords.x;
-    }
-
-    _createArray(x: number, y: number, defaultValue: any): Array<Array<any>> {
+        y: number,
+        defaultValue: any
+    ): Array<Array<any>> {
         const array = [];
         for (let i: number = 0; i < y; i++) {
             array.push(new Array(x).fill(defaultValue));
@@ -29,32 +32,40 @@ export class MultipleArray {
         return array;
     }
 
-    _getIsExistFunction(x: number, y: number) {
+    private getIsExistFunction(x: number, y: number) {
         return (coords: Coordinates) =>
             coords.y < y && coords.x < x && coords.x >= 0 && coords.y >= 0;
     }
 
     getValue(coords: Coordinates): any {
-        return this._array[coords.y][coords.x];
+        return this.array[coords.y][coords.x];
     }
 
     setValue(coords: Coordinates, value: any) {
-        this._array[coords.y][coords.x] = value;
+        this.array[coords.y][coords.x] = value;
     }
 
     getValuesInLine(): Array<any> {
         const aaa = new Array<any>();
 
-        this._array.forEach((array) => {
+        this.array.forEach((array) => {
             array.forEach((el) => aaa.push(el));
         });
 
         return aaa;
     }
+
+    getArray() {
+        return this.array;
+    }
 }
 
 export class NumberMultipleArray extends MultipleArray {
+    constructor(x: number, y: number, defaultValue: any) {
+        super(x, y, defaultValue);
+    }
+
     inc(coords: Coordinates) {
-        this._array[coords.y][coords.x] += 1;
+        this.array[coords.y][coords.x] += 1;
     }
 }

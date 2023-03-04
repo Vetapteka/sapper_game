@@ -1,15 +1,12 @@
 import { useRef } from 'react';
 import Tile, { TileRef } from './Tile';
-import { GameField } from './tools/GameField';
+import { GameManager } from './tools/GameManager';
 import styled from 'styled-components';
-import { MultipleArray } from './tools/MultipleArray';
 
 const x = 16;
 const y = 16;
 const bombCount = 40;
 const bombRadius = 1;
-
-let isFirstClick = true;
 
 const Grid = styled.div`
     display: grid;
@@ -19,8 +16,10 @@ const Grid = styled.div`
 `;
 
 const Game = () => {
+    const isFirstClick = useRef(true);
     const tileRefs = useRef<Array<TileRef>>([]);
-    const gameField = new GameField(bombCount, x, y, bombRadius);
+    const gameManager = new GameManager(bombCount, x, y, bombRadius);
+    const field = gameManager.getField();
 
     const createTiles = () => {
         const tiles = [];
@@ -42,40 +41,34 @@ const Game = () => {
         event.preventDefault();
 
         const tile = getTileByIndex(getTileIndexByClick(event));
-        const clickCounter = tile.getRightClickCount();
-        const clickCount = clickCounter.current;
+        const clickCountRef = tile.getRightClickCount();
+        const clickCount = clickCountRef.current;
 
         if (clickCount == 0) {
             tile.setTileClosedRole('flag');
-            clickCounter.current++;
+            clickCountRef.current++;
         } else if (clickCount == 1) {
             tile.setTileClosedRole('question');
-            clickCounter.current++;
+            clickCountRef.current++;
         } else if (clickCount == 2) {
             tile.setTileClosedRole('empty');
-            clickCounter.current = 0;
+            clickCountRef.current = 0;
         }
     };
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
         const tileIndex = getTileIndexByClick(event);
 
-        if (isFirstClick) {
+        if (isFirstClick.current) {
             initTiles(tileIndex);
-            isFirstClick = false;
+            isFirstClick.current = false;
         }
 
         const tile = getTileByIndex(tileIndex);
+        const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
 
-        const tileCoord = MultipleArray.getCoordsByLineCoords(
-            tile.getIndex(),
-            x
-        );
-
-        const openedCoords = gameField.getUnlockedCoords(tileCoord);
-
-        openedCoords.forEach((coords) => {
-            const index = MultipleArray.getLineCoordsByCoords(coords, x);
+        gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
+            const index = field.getLineCoordsByCoords(coords);
             tileRefs.current[index].open();
         });
     };
@@ -91,11 +84,8 @@ const Game = () => {
     };
 
     const initTiles = (firstClickTileIndex: number) => {
-        gameField.fillField(
-            MultipleArray.getCoordsByLineCoords(firstClickTileIndex, x)
-        );
+        gameManager.fillField(field.getCoordsByLineCoords(firstClickTileIndex));
 
-        const field = gameField.field;
         const filedLine = field.getValuesInLine();
 
         tileRefs.current.forEach((ref, index) => {
