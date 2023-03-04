@@ -1,8 +1,13 @@
 import { useRef } from 'react';
-import Tile, { TileRef } from './tile/Tile';
+import Tile, { TileData, TileRef, TileRole } from './tile/Tile';
+import { GameField } from './tools/GameField';
 
 const x = 16;
 const y = 16;
+const bombCount = 40;
+const bombRadius = 1;
+
+let isFirstClick = true;
 
 const Game = () => {
     const tileRefs = useRef<Array<TileRef | null>>([]);
@@ -15,7 +20,7 @@ const Game = () => {
                     key={i}
                     ref={(el) => (tileRefs.current[i] = el)}
                     onClick={handleTileClick}
-                    index={i}
+                    data={{ index: i, role: '0' }}
                 />
             );
         }
@@ -23,6 +28,11 @@ const Game = () => {
     };
 
     const handleTileClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (isFirstClick) {
+            initTiles();
+            isFirstClick = false;
+        }
+
         const target = event.target as HTMLDivElement;
         const index = target.dataset.index;
         console.log(index);
@@ -30,6 +40,18 @@ const Game = () => {
         if (typeof index !== 'undefined') {
             tileRefs.current[+index]?.handleOpen();
         }
+    };
+
+    const initTiles = () => {
+        const gameField = new GameField(bombCount, x, y, bombRadius);
+        gameField.fillField();
+        const field = gameField.field;
+
+        const filedLine = field.getValuesInLine();
+
+            tileRefs.current.forEach((ref, index) => {
+                ref?.setTileRole(filedLine[index]);
+            });
     };
 
     return <>{createTiles()}</>;
