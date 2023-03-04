@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
 import mineImage from '../../assets/mine.png';
 import oneNumber from '../../assets/1.png';
@@ -8,10 +8,13 @@ import fourNumber from '../../assets/4.png';
 import fiveNumber from '../../assets/5.png';
 import sixNumber from '../../assets/6.png';
 import sevenNumber from '../../assets/7.png';
+import flag from '../../assets/flag.png';
+import question from '../../assets/question.png';
 
-type TileRoleType = keyof typeof TileRole;
+type TileOpenedRoleType = keyof typeof TileOpenedRole;
+type TileClosedRoleType = keyof typeof TileClosedRole;
 
-export const TileRole = {
+export const TileOpenedRole = {
     '0': null,
     '-1': mineImage,
     '1': oneNumber,
@@ -23,12 +26,18 @@ export const TileRole = {
     '7': sevenNumber,
 };
 
+export const TileClosedRole = {
+    question: question,
+    flag: flag,
+    empty: null,
+};
+
 const Content = styled.div`
     width: 30px;
     height: 30px;
 `;
 
-const Closed = styled.div<OpenProps>`
+const Closed = styled.div<ClosedProps>`
     width: 100%;
     height: 100%;
     background-color: #bdbdbd;
@@ -37,18 +46,26 @@ const Closed = styled.div<OpenProps>`
     border-left-color: #f8f8f8;
     border-right-color: #7b7b7b;
     border-bottom-color: #7b7b7b;
+
+    background-image: url(${(props) => TileClosedRole[props.closedRole]});
+    background-repeat: no-repeat;
+    background-size: 100%;
 `;
 
-interface OpenProps {
-    role: TileRoleType;
+interface ClosedProps {
+    closedRole: TileClosedRoleType;
 }
 
-const Open = styled.div<OpenProps>`
+interface OpenedProps {
+    openedRole: TileOpenedRoleType;
+}
+
+const Open = styled.div<OpenedProps>`
     width: 100%;
     height: 100%;
     background-color: #bdbdbd;
     border: 1px solid #7b7b7b;
-    background-image: url(${(props) => TileRole[props.role]});
+    background-image: url(${(props) => TileOpenedRole[props.openedRole]});
     background-repeat: no-repeat;
     background-size: 100%;
 `;
@@ -60,36 +77,55 @@ interface TileProps {
 }
 
 export interface TileData {
-    role: TileRoleType;
+    openedRole: TileOpenedRoleType;
+    closedRole: TileClosedRoleType;
     index: number;
 }
 
 export interface TileRef {
-    handleOpen: () => void;
-    setTileRole: (role: TileRoleType) => void;
+    open: () => void;
+    getRightClickCount: () => React.MutableRefObject<number>;
+
+    setTileOpenedRole: (role: TileOpenedRoleType) => void;
+    setTileClosedRole: (role: TileClosedRoleType) => void;
 }
 
 const Tile = forwardRef<TileRef, TileProps>(
     ({ onLeftClick, onRightClick, data }, ref) => {
         const [isOpen, setIsOpen] = useState(false);
-        const [role, setRole] = useState<TileRoleType>(data.role);
+        const [openedRole, setOpenedRole] = useState<TileOpenedRoleType>(
+            data.openedRole
+        );
+        const [closedRole, setClosedRole] = useState<TileClosedRoleType>(
+            data.closedRole
+        );
+
+        const rightClickCount = useRef(0);
 
         useImperativeHandle(ref, () => ({
-            handleOpen: () => {
+            open: () => {
                 setIsOpen(true);
             },
 
-            setTileRole: (role) => {
-                setRole(role);
+            getRightClickCount: () => {
+                return rightClickCount;
+            },
+
+            setTileOpenedRole: (role) => {
+                setOpenedRole(role);
+            },
+
+            setTileClosedRole: (role) => {
+                setClosedRole(role);
             },
         }));
 
         return (
             <Content onClick={onLeftClick} onContextMenu={onRightClick}>
                 {isOpen ? (
-                    <Open data-index={data.index} role={role} />
+                    <Open data-index={data.index} openedRole={openedRole} />
                 ) : (
-                    <Closed data-index={data.index} role={role} />
+                    <Closed data-index={data.index} closedRole={closedRole} />
                 )}
             </Content>
         );

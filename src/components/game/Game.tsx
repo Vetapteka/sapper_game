@@ -10,7 +10,7 @@ const bombRadius = 1;
 let isFirstClick = true;
 
 const Game = () => {
-    const tileRefs = useRef<Array<TileRef | null>>([]);
+    const tileRefs = useRef<Array<TileRef>>([]);
 
     const createTiles = () => {
         const tiles = [];
@@ -18,10 +18,10 @@ const Game = () => {
             tiles.push(
                 <Tile
                     key={i}
-                    ref={(el) => (tileRefs.current[i] = el)}
+                    ref={(el) => el && (tileRefs.current[i] = el)}
                     onLeftClick={handleLeftClick}
                     onRightClick={handleRightClick}
-                    data={{ index: i, role: '0' }}
+                    data={{ index: i, openedRole: '0', closedRole: 'empty' }}
                 />
             );
         }
@@ -30,6 +30,21 @@ const Game = () => {
 
     const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
+
+        const tile = getTileByClick(event);
+        const clickCounter = tile.getRightClickCount();
+        const clickCount = clickCounter.current;
+
+        if (clickCount == 0) {
+            tile.setTileClosedRole('flag');
+            clickCounter.current++;
+        } else if (clickCount == 1) {
+            tile.setTileClosedRole('question');
+            clickCounter.current++;
+        } else if (clickCount == 2) {
+            tile.setTileClosedRole('empty');
+            clickCounter.current = 0;
+        }
     };
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -38,16 +53,16 @@ const Game = () => {
             isFirstClick = false;
         }
 
-        const tile = getTileByClick(event);
-        tile?.handleOpen();
+        getTileByClick(event)?.open();
     };
 
     const getTileByClick = (
         event: React.MouseEvent<HTMLDivElement>
-    ): null | TileRef => {
+    ): TileRef => {
         const target = event.target as HTMLDivElement;
-        const index = target.dataset.index;
-        return typeof index !== 'undefined' ? tileRefs.current[+index] : null;
+        const index = target.dataset.index || '0';
+
+        return tileRefs.current[+index];
     };
 
     const initTiles = () => {
@@ -58,7 +73,7 @@ const Game = () => {
         const filedLine = field.getValuesInLine();
 
         tileRefs.current.forEach((ref, index) => {
-            ref?.setTileRole(filedLine[index]);
+            ref?.setTileOpenedRole(filedLine[index]);
         });
     };
 
