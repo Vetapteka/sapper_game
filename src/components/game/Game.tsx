@@ -22,7 +22,6 @@ const Grid = styled.div`
 const Game = () => {
     const timerRef = useRef<TimerRef>(null);
     const smileButtonRef = useRef<SmileButtonRef>(null);
-
     const isMouseDownRef = useRef(false);
 
     const handleMouseDown = () => {
@@ -90,18 +89,26 @@ const Game = () => {
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
         const tileIndex = getTileIndexByClick(event);
+        const tile = getTileByIndex(tileIndex);
 
         if (isFirstClick.current) {
             startGame(tileIndex);
         }
 
-        const tile = getTileByIndex(tileIndex);
-        const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
+        if (tile.isBomb()) {
+            loseGame();
+        }
 
-        gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
-            const index = field.getLineCoordsByCoords(coords);
-            tileRefs.current[index].open();
-        });
+        openNearestEmptyTile(tile);
+    };
+
+    const loseGame = () => {
+        smileButtonRef.current?.setRole('sad');
+        endGame();
+    };
+
+    const endGame = () => {
+        timerRef.current?.stop();
     };
 
     const getTileIndexByClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -121,6 +128,15 @@ const Game = () => {
 
         tileRefs.current.forEach((ref, index) => {
             ref?.setTileOpenedRole(filedLine[index]);
+        });
+    };
+
+    const openNearestEmptyTile = (tile: TileRef) => {
+        const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
+
+        gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
+            const index = field.getLineCoordsByCoords(coords);
+            tileRefs.current[index].open();
         });
     };
 
