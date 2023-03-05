@@ -67,8 +67,6 @@ export class MultipleArray {
                 innerArray[i] = this.defaultValue;
             }
         });
-
-        console.log(this.array);
     }
 }
 

@@ -3,7 +3,6 @@ import Tile, { TileRef } from './Tile';
 import styled from 'styled-components';
 import { FieldSettings, GameManager } from './tools/GameManager';
 import { ClickHandles } from './Game';
-import { click } from '@testing-library/user-event/dist/click';
 
 const Grid = styled.div`
     display: grid;
