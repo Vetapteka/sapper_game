@@ -38,6 +38,7 @@ export class GameManager {
     clearField() {
         this.openedCoordinates.clear();
         this.field.clear();
+        this.bombCoordinates = new Array<Coordinates>()
     }
 
     getUnlockedCoords(tileCoord: Coordinates): Array<Coordinates> {
