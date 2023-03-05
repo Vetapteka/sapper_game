@@ -57,22 +57,25 @@ const Game = () => {
                 clickCountRef.current++;
             } else if (clickCount == 2) {
                 tile.setTileClosedRole('empty');
-                bombCounterRef.current?.dec();
+                bombCounterRef.current?.inc();
                 clickCountRef.current = 0;
             }
         }
     };
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (isFirstClick.current) {
-            startGame(event);
-            isFirstClick.current = false;
-        }
+        const tile = tilesRef.current?.getTileByClick(event);
+        if (tile && tile.isLeftClicable()) {
+            if (isFirstClick.current) {
+                startGame(event);
+                isFirstClick.current = false;
+            }
 
-        tilesRef.current?.openDependentTiles(event);
+            tilesRef.current?.openDependentTiles(tile);
 
-        if (tilesRef.current?.getTileByClick(event).isBomb()) {
-            loseGame();
+            if (tile.isBomb()) {
+                loseGame();
+            }
         }
     };
 

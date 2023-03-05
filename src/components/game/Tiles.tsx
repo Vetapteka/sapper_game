@@ -14,7 +14,7 @@ const Grid = styled.div`
 export interface TilesRef {
     initTiles: (event: React.MouseEvent<HTMLDivElement>) => void;
     resetTiles: () => void;
-    openDependentTiles: (event: React.MouseEvent<HTMLDivElement>) => void;
+    openDependentTiles: (tile: TileRef) => void;
     getTileByClick: (event: React.MouseEvent<HTMLDivElement>) => TileRef;
 }
 
@@ -94,10 +94,7 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
         };
 
         /* откроет либо пустые рядом либо бомбы */
-        const openDependentTiles = (
-            event: React.MouseEvent<HTMLDivElement>
-        ) => {
-            const tile = getTileByClick(event);
+        const openDependentTiles = (tile: TileRef) => {
             const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
 
             gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
