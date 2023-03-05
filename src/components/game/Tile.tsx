@@ -50,14 +50,22 @@ const Closed = styled.div<ClosedProps>`
     height: 100%;
     background-color: #bdbdbd;
     border: 4px solid;
-    border-top-color: #f8f8f8;
-    border-left-color: #f8f8f8;
-    border-right-color: #7b7b7b;
-    border-bottom-color: #7b7b7b;
+    border-top-color: ${(props) => props.theme.colors.accent};
+    border-left-color: ${(props) => props.theme.colors.accent};
+    border-right-color: ${(props) => props.theme.colors.secondary};
+    border-bottom-color: ${(props) => props.theme.colors.secondary};
 
     background-image: url(${(props) => TileClosedRole[props.closedRole]});
     background-repeat: no-repeat;
     background-size: 100%;
+
+    @media ${(props) => props.theme.media.phone} {
+        border: 3px solid;
+        border-top-color: ${(props) => props.theme.colors.accent};
+        border-left-color: ${(props) => props.theme.colors.accent};
+        border-right-color: ${(props) => props.theme.colors.secondary};
+        border-bottom-color: ${(props) => props.theme.colors.secondary};
+    }
 `;
 
 interface ClosedProps {
