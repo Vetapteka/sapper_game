@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.js": "/sapper_game/static/js/main.9ee508f4.js",
+    "static/media/sad.svg": "/sapper_game/static/media/sad.75c456eac40aff5f8d3678d920fb1e3b.svg",
+    "static/media/sunglasses.svg": "/sapper_game/static/media/sunglasses.b4df9fad8e7ab623ec5f1b5c534845dc.svg",
+    "static/media/wonder.svg": "/sapper_game/static/media/wonder.243d07b4af2c3ee98e7b76e9d19df830.svg",
+    "static/media/happy.svg": "/sapper_game/static/media/happy.5f8f5681e07b7945b984628a5902bf2d.svg",
+    "static/media/mine.svg": "/sapper_game/static/media/mine.30dca5da2c79c3ff73d6f513943d7cd5.svg",
+    "static/media/d7.svg": "/sapper_game/static/media/d7.fc7a99908e8ac2b96939ddffab8315b5.svg",
+    "static/media/d9.svg": "/sapper_game/static/media/d9.5d90e458503c33dbd45cb85f2c69c0d6.svg",
+    "static/media/d8.svg": "/sapper_game/static/media/d8.e3a6571c3c05f239910b56b33096aa23.svg",
+    "static/media/d6.svg": "/sapper_game/static/media/d6.8e7d73b18cede946e2b89ba42f80f9e6.svg",
+    "static/media/d5.svg": "/sapper_game/static/media/d5.e2c93be9006dbedeab17908a2da52759.svg",
+    "static/media/d2.svg": "/sapper_game/static/media/d2.92b690e47903ac07d6dc963ca4c60ed0.svg",
+    "static/media/d4.svg": "/sapper_game/static/media/d4.c77d70bc904dda29240862cc70bb48a5.svg",
+    "static/media/d3.svg": "/sapper_game/static/media/d3.9b975b403d3253688910ea438718726f.svg",
+    "static/media/d0.svg": "/sapper_game/static/media/d0.220e21ac5d30934a47e5f5ac46c09a3c.svg",
+    "static/media/d1.svg": "/sapper_game/static/media/d1.75d90ffbb627a59b7977663b4e2e4102.svg",
+    "static/media/type3.svg": "/sapper_game/static/media/type3.eaa8bc915164b2b9621216b46d7d65a7.svg",
+    "static/media/type2.svg": "/sapper_game/static/media/type2.143789f841cf6b3621c63ce960ef6bef.svg",
+    "static/media/type6.svg": "/sapper_game/static/media/type6.0b026f2de7c640b9846ccfccdc8dc4e1.svg",
+    "static/media/question.svg": "/sapper_game/static/media/question.09f5e91d3280de875f24648d3150a8cf.svg",
+    "static/media/type5.svg": "/sapper_game/static/media/type5.731ad9bba1796fcb916ffe77c6b65c4e.svg",
+    "static/media/flag.svg": "/sapper_game/static/media/flag.4919e3a0421f0ebfa25dc2a3c6c06fa8.svg",
+    "static/media/type4.svg": "/sapper_game/static/media/type4.ed7b4ce2ccd55d95dfd0762fda058447.svg",
+    "static/media/type7.svg": "/sapper_game/static/media/type7.bef011454f98aaedc4b4ee20068c2a97.svg",
+    "static/media/type1.svg": "/sapper_game/static/media/type1.538df5cfb94d802d3826fce668c521f1.svg",
+    "index.html": "/sapper_game/index.html",
+    "main.9ee508f4.js.map": "/sapper_game/static/js/main.9ee508f4.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.9ee508f4.js"
+  ]
+}
