@@ -2,6 +2,13 @@ import { Coordinates } from './Coordinates';
 import { MultipleArray, NumberMultipleArray } from './MultipleArray';
 import { getRandomIndex } from './tools';
 
+export interface FieldSettings {
+    x: number;
+    y: number;
+    bombCount: number;
+    bombRadius: number;
+}
+
 export class GameManager {
     private field: NumberMultipleArray;
     private bombCount: number;
@@ -13,20 +20,14 @@ export class GameManager {
         coords: Coordinates | undefined
     ) => Array<Coordinates>;
 
-    constructor(
-        bombCount: number,
-        x: number,
-        y: number,
-        neighbourRadius: number
-    ) {
+    constructor({ bombCount, x, y, bombRadius }: FieldSettings) {
         this.bombCount = bombCount;
         this.bombCoordinates = new Array<Coordinates>();
         this.openedCoordinates = new MultipleArray(x, y, false);
         this.x = x;
         this.y = y;
         this.field = new NumberMultipleArray(x, y, 0);
-        this.getNeighboursCoords =
-            this.getNeighboursCoordPattern(neighbourRadius);
+        this.getNeighboursCoords = this.getNeighboursCoordPattern(bombRadius);
     }
 
     getField(): NumberMultipleArray {
@@ -38,6 +39,11 @@ export class GameManager {
             const bombCoords = this.createBomb(startCoords);
             this.notifyNeighbours(bombCoords);
         }
+    }
+
+    clearField() {
+        this.openedCoordinates.clear();
+        this.field.clear();
     }
 
     getUnlockedCoords(tileCoord: Coordinates): Array<Coordinates> {

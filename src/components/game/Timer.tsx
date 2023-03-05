@@ -3,11 +3,17 @@ import { useState, useImperativeHandle, forwardRef } from 'react';
 export interface TimerRef {
     start: () => void;
     stop: () => void;
+    reset: () => void;
 }
 
 const Timer = forwardRef<TimerRef>((props, ref) => {
     const [time, setTime] = useState(0);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+    const reset = () => {
+        stop();
+        setTime(0);
+    };
 
     const start = () => {
         if (!intervalId) {
@@ -28,6 +34,7 @@ const Timer = forwardRef<TimerRef>((props, ref) => {
     useImperativeHandle(ref, () => ({
         start,
         stop,
+        reset,
     }));
 
     return <div>{time}</div>;

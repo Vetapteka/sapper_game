@@ -3,11 +3,13 @@ import { Coordinates } from './Coordinates';
 export class MultipleArray {
     protected array: Array<Array<any>>;
     protected x: number;
+    protected defaultValue;
     isExist;
 
     constructor(x: number, y: number, defaultValue: any) {
         this.array = this.createArray(x, y, defaultValue);
         this.x = x;
+        this.defaultValue = defaultValue;
         this.isExist = this.getIsExistFunction(x, y);
     }
 
@@ -57,6 +59,16 @@ export class MultipleArray {
 
     getArray() {
         return this.array;
+    }
+
+    clear() {
+        this.array.forEach((innerArray) => {
+            for (let i = 0; i < this.x; i++) {
+                innerArray[i] = this.defaultValue;
+            }
+        });
+
+        console.log(this.array);
     }
 }
 

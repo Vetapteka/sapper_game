@@ -84,6 +84,7 @@ export interface TileData {
 
 export interface TileRef {
     open: () => void;
+    close: () => void;
     isOpened: () => boolean;
     isBomb: () => boolean;
     getIndex: () => number;
@@ -112,6 +113,7 @@ const Tile = forwardRef<TileRef, TileProps>(
             isBomb: () => openedRole == '-1',
 
             open: () => setIsOpened(true),
+            close: () => setIsOpened(false),
 
             getRightClickCount: () => rightClickCount,
 
