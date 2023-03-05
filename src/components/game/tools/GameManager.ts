@@ -1,13 +1,7 @@
 import { Coordinates } from './Coordinates';
 import { MultipleArray, NumberMultipleArray } from './MultipleArray';
 import { getRandomIndex } from './tools';
-
-export interface FieldSettings {
-    x: number;
-    y: number;
-    bombCount: number;
-    bombRadius: number;
-}
+import {GameSettings} from '../../../gameSettings';
 
 export class GameManager {
     private field: NumberMultipleArray;
@@ -20,7 +14,7 @@ export class GameManager {
         coords: Coordinates | undefined
     ) => Array<Coordinates>;
 
-    constructor({ bombCount, x, y, bombRadius }: FieldSettings) {
+    constructor({ bombCount, x, y, bombRadius }: GameSettings) {
         this.bombCount = bombCount;
         this.bombCoordinates = new Array<Coordinates>();
         this.openedCoordinates = new MultipleArray(x, y, false);

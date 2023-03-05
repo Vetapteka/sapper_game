@@ -1,7 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Tile, { TileRef } from './Tile';
 import styled from 'styled-components';
-import { FieldSettings, GameManager } from './tools/GameManager';
+import { GameManager } from './tools/GameManager';
+import {GameSettings} from '../../gameSettings';
 import { ClickHandles } from './Game';
 
 const Grid = styled.div`
@@ -16,10 +17,11 @@ export interface TilesRef {
     resetTiles: () => void;
     openDependentTiles: (tile: TileRef) => void;
     getTileByClick: (event: React.MouseEvent<HTMLDivElement>) => TileRef;
+    isAllNoBombOpened: () => boolean;
 }
 
 interface TilesProps {
-    fieldSettings: FieldSettings;
+    fieldSettings: GameSettings;
     clickHandles: ClickHandles;
 }
 
@@ -28,6 +30,7 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
         const tileRefs = useRef<Array<TileRef>>([]);
         const gameManager = new GameManager(fieldSettings);
         const field = gameManager.getField();
+        const openedNoBombTilesRef = useRef<number>(0);
 
         const createTiles = () => {
             const tiles = [];
@@ -93,21 +96,32 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
             return getTileByIndex(getTileIndexByClick(event));
         };
 
-        /* откроет либо пустые рядом либо бомбы */
+        /* will open either empty nearby or bombs */
         const openDependentTiles = (tile: TileRef) => {
             const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
 
             gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
                 const index = field.getLineCoordsByCoords(coords);
-                tileRefs.current[index].open();
+                const tile = getTileByIndex(index);
+                if (!tile.isBomb()) {
+                    openedNoBombTilesRef.current++;
+                    console.log(openedNoBombTilesRef.current);
+                }
+                tile.open();
             });
         };
+
+        const tileCount = fieldSettings.x * fieldSettings.y;
+
+        const isAllNoBombOpened = (): boolean =>
+            openedNoBombTilesRef.current == tileCount - fieldSettings.bombCount;
 
         useImperativeHandle(ref, () => ({
             initTiles,
             resetTiles,
             openDependentTiles,
             getTileByClick,
+            isAllNoBombOpened,
         }));
 
         return (

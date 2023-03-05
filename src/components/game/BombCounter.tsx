@@ -8,6 +8,7 @@ export interface BombCounterRef {
     inc: () => void;
     dec: () => void;
     reset: () => void;
+    getBombCount: () => number;
 }
 
 const BombCounter = forwardRef<BombCounterRef, BombCounterProps>(
@@ -18,6 +19,7 @@ const BombCounter = forwardRef<BombCounterRef, BombCounterProps>(
             inc: () => setBombCount((prev) => prev + 1),
             dec: () => setBombCount((prev) => prev - 1),
             reset: () => setBombCount(initialBombCount),
+            getBombCount: () => bombCount,
         }));
 
         return <div>{bombCount}</div>;

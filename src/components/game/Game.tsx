@@ -4,14 +4,7 @@ import BombCounter, { BombCounterRef } from './BombCounter';
 import Timer, { TimerRef } from './Timer';
 import SmileButton, { SmileButtonRef } from './SmileButton';
 import Tiles, { TilesRef } from './Tiles';
-import { FieldSettings } from './tools/GameManager';
-
-const fieldSettings: FieldSettings = {
-    x: 16,
-    y: 16,
-    bombCount: 40,
-    bombRadius: 1,
-};
+import gameSettings from '../../gameSettings';
 
 export interface ClickHandles {
     handleMouseDown: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -76,6 +69,8 @@ const Game = () => {
             if (tile.isBomb()) {
                 loseGame();
             }
+
+            if (tilesRef.current?.isAllNoBombOpened()) winGame();
         }
     };
 
@@ -94,6 +89,7 @@ const Game = () => {
     };
 
     const winGame = () => {
+        smileButtonRef.current?.setRole('sunglasses');
         endGame();
     };
 
@@ -102,6 +98,7 @@ const Game = () => {
         isFirstClick.current = true;
         timerRef.current?.reset();
         smileButtonRef.current?.setRole('default');
+        bombCounterRef.current?.reset();
     };
 
     const clickHandles: ClickHandles = {
@@ -117,13 +114,13 @@ const Game = () => {
                 <Tiles
                     ref={tilesRef}
                     clickHandles={clickHandles}
-                    fieldSettings={fieldSettings}
+                    fieldSettings={gameSettings}
                 />
             }
             bombCounter={
                 <BombCounter
                     ref={bombCounterRef}
-                    initialBombCount={fieldSettings.bombCount}
+                    initialBombCount={gameSettings.bombCount}
                 />
             }
             timer={<Timer ref={timerRef} />}
