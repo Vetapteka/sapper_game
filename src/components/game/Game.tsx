@@ -38,19 +38,19 @@ const Game = () => {
 
         const tile = tilesRef.current?.getTileByClick(event);
 
-        if (tile && tile.isClosed() && bombCounterRef.current?.isBombsExist()) {
+        if (tile && tile.isClosed()) {
             const clickCountRef = tile.getRightClickCount();
             const clickCount = clickCountRef.current;
-            if (clickCount == 0) {
+            if (clickCount == 0 && bombCounterRef.current?.isBombsExist()) {
                 tile.setTileClosedRole('flag');
                 clickCountRef.current++;
                 bombCounterRef.current?.dec();
             } else if (clickCount == 1) {
                 tile.setTileClosedRole('question');
                 clickCountRef.current++;
+                bombCounterRef.current?.inc();
             } else if (clickCount == 2) {
                 tile.setTileClosedRole('empty');
-                bombCounterRef.current?.inc();
                 clickCountRef.current = 0;
             }
         }
