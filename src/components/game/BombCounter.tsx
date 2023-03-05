@@ -1,4 +1,5 @@
 import { forwardRef, useState, useImperativeHandle } from 'react';
+import DigitProvider from './DigitProvider';
 
 interface BombCounterProps {
     initialBombCount: number;
@@ -22,7 +23,7 @@ const BombCounter = forwardRef<BombCounterRef, BombCounterProps>(
             getBombCount: () => bombCount,
         }));
 
-        return <div>{bombCount}</div>;
+        return <DigitProvider value={bombCount} />;
     }
 );
 

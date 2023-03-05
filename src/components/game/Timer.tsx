@@ -1,4 +1,5 @@
 import { useState, useImperativeHandle, forwardRef } from 'react';
+import DigitProvider from './DigitProvider';
 
 export interface TimerRef {
     start: () => void;
@@ -37,7 +38,7 @@ const Timer = forwardRef<TimerRef>((props, ref) => {
         reset,
     }));
 
-    return <div>{time}</div>;
+    return <DigitProvider value={time} />;
 });
 
 export default Timer;
