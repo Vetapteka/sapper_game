@@ -11,8 +11,8 @@ import eightDigit from '../../assets/oldTheme/digits/d8.svg';
 import nineDigit from '../../assets/oldTheme/digits/d9.svg';
 
 const Conteiner = styled.div`
-    width: 300px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
     display: flex;
     background-color: black;
     justify-content: space-evenly;

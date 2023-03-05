@@ -6,8 +6,8 @@ export const GlobalStyle = createGlobalStyle`
   padding: 0;
   box-sizing: border-box;
   font-family: 'Comfortaa', sans-serif;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: white;
   &::selection{
-    background-color: red;
+    background-color: yellow;
   }
 }`;
