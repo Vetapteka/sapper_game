@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 import Tile, { TileRef } from './Tile';
 import styled from 'styled-components';
 import { GameManager } from './tools/GameManager';
-import {GameSettings} from '../../gameSettings';
+import { GameSettings } from '../../gameSettings';
 import { ClickHandles } from './Game';
 
 const Grid = styled.div`
@@ -63,6 +63,7 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
                 tile.setTileClosedRole('empty');
                 tile.setTileOpenedRole('0');
             });
+            openedNoBombTilesRef.current = 0;
         };
 
         const initTiles = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -105,7 +106,7 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
                 const tile = getTileByIndex(index);
                 if (!tile.isBomb()) {
                     openedNoBombTilesRef.current++;
-                    console.log(openedNoBombTilesRef.current);
+                    
                 }
                 tile.open();
             });

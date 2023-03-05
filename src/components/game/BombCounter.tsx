@@ -10,6 +10,7 @@ export interface BombCounterRef {
     dec: () => void;
     reset: () => void;
     getBombCount: () => number;
+    isBombsExist: () => boolean;
 }
 
 const BombCounter = forwardRef<BombCounterRef, BombCounterProps>(
@@ -21,6 +22,7 @@ const BombCounter = forwardRef<BombCounterRef, BombCounterProps>(
             dec: () => setBombCount((prev) => prev - 1),
             reset: () => setBombCount(initialBombCount),
             getBombCount: () => bombCount,
+            isBombsExist: () => bombCount > 0,
         }));
 
         return <DigitProvider value={bombCount} />;

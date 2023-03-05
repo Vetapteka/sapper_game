@@ -38,7 +38,7 @@ const Game = () => {
 
         const tile = tilesRef.current?.getTileByClick(event);
 
-        if (tile && tile.isClosed()) {
+        if (tile && tile.isClosed() && bombCounterRef.current?.isBombsExist()) {
             const clickCountRef = tile.getRightClickCount();
             const clickCount = clickCountRef.current;
             if (clickCount == 0) {

@@ -7,7 +7,7 @@ export interface GameSettings {
 const gameSettings: GameSettings = {
     x: 16,
     y: 16,
-    bombCount: 1,
+    bombCount: 40,
     bombRadius: 1,
 };
 
