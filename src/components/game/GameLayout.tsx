@@ -11,14 +11,14 @@ const Panel = styled.div`
 `;
 
 interface GameLayoutProps {
-    game: ReactNode;
+    tiles: ReactNode;
     bombCounter: ReactNode;
     smileButton: ReactNode;
     timer: ReactNode;
 }
 
 const GameLayout = ({
-    game,
+    tiles: tiles,
     bombCounter,
     smileButton,
     timer,
@@ -30,7 +30,7 @@ const GameLayout = ({
                 {smileButton}
                 {timer}
             </Panel>
-            {game}
+            {tiles}
         </Content>
     );
 };

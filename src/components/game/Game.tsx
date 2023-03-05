@@ -1,27 +1,34 @@
 import { useRef, useState } from 'react';
-import Tile, { TileRef } from './Tile';
-import { GameManager } from './tools/GameManager';
-import styled from 'styled-components';
 import GameLayout from './GameLayout';
 import BombCounter from './BombCounter';
 import Timer, { TimerRef } from './Timer';
 import SmileButton, { SmileButtonRef } from './SmileButton';
+import Tiles, { TilesRef } from './Tiles';
+import { FieldSettings } from './tools/GameManager';
 
-const x = 16;
-const y = 16;
-const bombCount = 40;
-const bombRadius = 1;
+const fieldSettings: FieldSettings = {
+    x: 16,
+    y: 16,
+    bombCount: 40,
+    bombRadius: 1,
+};
 
-const Grid = styled.div`
-    display: grid;
-    margin: 0 auto;
-    grid-template-columns: repeat(16, 30px);
-    grid-template-rows: repeat(16, 30px);
-`;
+export interface ClickHandles {
+    handleMouseDown: (event: React.MouseEvent<HTMLDivElement>) => void;
+    handleMouseUp: (event: React.MouseEvent<HTMLDivElement>) => void;
+    handleLeftClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+    handleRightClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+}
 
 const Game = () => {
     const timerRef = useRef<TimerRef>(null);
     const smileButtonRef = useRef<SmileButtonRef>(null);
+    const tilesRef = useRef<TilesRef>(null);
+
+    const [flagsCount, setFlagsCount] = useState(fieldSettings.bombCount);
+
+    const isFirstClick = useRef(true);
+
     const isMouseDownRef = useRef(false);
 
     const handleMouseDown = () => {
@@ -34,44 +41,14 @@ const Game = () => {
         smileButtonRef.current?.setRole('default');
     };
 
-    const isFirstClick = useRef(true);
-    const tileRefs = useRef<Array<TileRef>>([]);
-    const gameManager = new GameManager(bombCount, x, y, bombRadius);
-    const field = gameManager.getField();
-
-    const [flagsCount, setFlagsCount] = useState(bombCount);
-
-    const startGame = (tileIndex: number) => {
-        initTiles(tileIndex);
-        timerRef.current?.start();
-        isFirstClick.current = false;
-    };
-
-    const createTiles = () => {
-        const tiles = [];
-        for (let i: number = 0; i < y * x; i++) {
-            tiles.push(
-                <Tile
-                    key={i}
-                    ref={(el) => el && (tileRefs.current[i] = el)}
-                    onLeftClick={handleLeftClick}
-                    onRightClick={handleRightClick}
-                    data={{ index: i, openedRole: '0', closedRole: 'empty' }}
-                />
-            );
-        }
-        return tiles;
-    };
-
     const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
 
-        const tile = getTileByIndex(getTileIndexByClick(event));
+        const tile = tilesRef.current?.getTileByClick(event);
 
-        if (!tile.isOpened()) {
+        if (tile && !tile.isOpened()) {
             const clickCountRef = tile.getRightClickCount();
             const clickCount = clickCountRef.current;
-
             if (clickCount == 0) {
                 tile.setTileClosedRole('flag');
                 clickCountRef.current++;
@@ -88,18 +65,25 @@ const Game = () => {
     };
 
     const handleLeftClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        const tileIndex = getTileIndexByClick(event);
-        const tile = getTileByIndex(tileIndex);
-
         if (isFirstClick.current) {
-            startGame(tileIndex);
+            startGame(event);
+            isFirstClick.current = false;
         }
 
-        if (tile.isBomb()) {
+        tilesRef.current?.openDependentTiles(event);
+
+        if (tilesRef.current?.getTileByClick(event).isBomb()) {
             loseGame();
         }
+    };
 
-        openNearestEmptyTile(tile);
+    const startGame = (event: React.MouseEvent<HTMLDivElement>) => {
+        tilesRef.current?.initTiles(event);
+        timerRef.current?.start();
+    };
+
+    const endGame = () => {
+        timerRef.current?.stop();
     };
 
     const loseGame = () => {
@@ -107,49 +91,37 @@ const Game = () => {
         endGame();
     };
 
-    const endGame = () => {
-        timerRef.current?.stop();
+    const winGame = () => {
+        endGame();
     };
 
-    const getTileIndexByClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        const target = event.target as HTMLDivElement;
-        const index = target.dataset.index || '0';
-        return +index;
+    const resetGame = () => {
+        tilesRef.current?.resetTiles();
+        isFirstClick.current = true;
+        timerRef.current?.reset();
     };
 
-    const getTileByIndex = (index: number): TileRef => {
-        return tileRefs.current[index];
-    };
-
-    const initTiles = (firstClickTileIndex: number) => {
-        gameManager.fillField(field.getCoordsByLineCoords(firstClickTileIndex));
-
-        const filedLine = field.getValuesInLine();
-
-        tileRefs.current.forEach((ref, index) => {
-            ref?.setTileOpenedRole(filedLine[index]);
-        });
-    };
-
-    const openNearestEmptyTile = (tile: TileRef) => {
-        const tileCoords = field.getCoordsByLineCoords(tile.getIndex());
-
-        gameManager.getUnlockedCoords(tileCoords).forEach((coords) => {
-            const index = field.getLineCoordsByCoords(coords);
-            tileRefs.current[index].open();
-        });
+    const clickHandles: ClickHandles = {
+        handleMouseDown,
+        handleMouseUp,
+        handleLeftClick,
+        handleRightClick,
     };
 
     return (
         <GameLayout
-            game={
-                <Grid onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
-                    {createTiles()}
-                </Grid>
+            tiles={
+                <Tiles
+                    ref={tilesRef}
+                    clickHandles={clickHandles}
+                    fieldSettings={fieldSettings}
+                />
             }
             bombCounter={<BombCounter bombCount={flagsCount} />}
             timer={<Timer ref={timerRef} />}
-            smileButton={<SmileButton ref={smileButtonRef} />}
+            smileButton={
+                <SmileButton ref={smileButtonRef} handleClick={resetGame} />
+            }
         />
     );
 };

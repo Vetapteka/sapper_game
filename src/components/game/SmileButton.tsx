@@ -39,16 +39,22 @@ export interface SmileButtonRef {
     setRole: (role: SmileRoleType) => void;
 }
 
-const SmileButton = forwardRef<SmileButtonRef>((props, ref) => {
-    const [role, setRole] = useState<SmileRoleType>('default');
+interface SmileButtonProps {
+    handleClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+}
 
-    useImperativeHandle(ref, () => ({
-        setRole: (role) => {
-            setRole(role);
-        },
-    }));
+const SmileButton = forwardRef<SmileButtonRef, SmileButtonProps>(
+    ({ handleClick }, ref) => {
+        const [role, setRole] = useState<SmileRoleType>('default');
 
-    return <Smile role={role} />;
-});
+        useImperativeHandle(ref, () => ({
+            setRole: (role) => {
+                setRole(role);
+            },
+        }));
+
+        return <Smile role={role} onClick={handleClick} />;
+    }
+);
 
 export default SmileButton;
