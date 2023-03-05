@@ -1,39 +1,58 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { TILE_SIZE_LARGE, TILE_SIZE_SMALL } from '../../styles/global';
+import {
+    InnerBorderContainer,
+    OuterBorderContainer,
+} from '../styled components/BorderContainer';
 
 const Content = styled.div`
-    border: 4px solid;
-    border-top-color: #f8f8f8;
-    border-left-color: #f8f8f8;
-    border-right-color: #7b7b7b;
-    border-bottom-color: #7b7b7b;
+    background-color: ${(props) => props.theme.colors.primary};
+    padding: ${TILE_SIZE_LARGE / 2}px;
 
-    background-color: lightgray;
-    padding: 20px;
-`;
-
-const InnerBorderContainer = styled.div`
-    border: 4px solid;
-    border-top-color: #7b7b7b;
-    border-left-color: #7b7b7b;
-    border-right-color: #f8f8f8;
-    border-bottom-color: #f8f8f8;
+    @media ${(props) => props.theme.media.phone} {
+        padding: ${TILE_SIZE_SMALL / 2}px;
+    }
 `;
 
 const DigitContainer = styled.div`
-    width: 90px;
-    height: 60px;
+    width: ${TILE_SIZE_LARGE * 3}px;
+    height: ${TILE_SIZE_LARGE * 2}px;
+
+    @media ${(props) => props.theme.media.phone} {
+        width: ${TILE_SIZE_SMALL * 3}px;
+        height: ${TILE_SIZE_SMALL * 2}px;
+    }
 `;
 
 const PanelContainer = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: ${TILE_SIZE_LARGE / 2}px;
+
+    @media ${(props) => props.theme.media.phone} {
+        margin-bottom: ${TILE_SIZE_SMALL / 2}px;
+    }
 `;
 
 const Panel = styled.div`
-    background-color: lightgray;
+    background-color: ${(props) => props.theme.colors.primary};
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: ${TILE_SIZE_LARGE / 3}px;
+
+    @media ${(props) => props.theme.media.phone} {
+        padding: ${TILE_SIZE_SMALL / 3}px;
+    }
+`;
+
+const PanelElementContainer = styled.div`
+    width: ${TILE_SIZE_LARGE * 2}px;
+    height: ${TILE_SIZE_LARGE * 2}px;
+
+    @media ${(props) => props.theme.media.phone} {
+        width: ${TILE_SIZE_SMALL * 2}px;
+        height: ${TILE_SIZE_SMALL * 2}px;
+    }
 `;
 
 interface GameLayoutProps {
@@ -50,19 +69,25 @@ const GameLayout = ({
     timer,
 }: GameLayoutProps) => {
     return (
-        <Content>
-            <PanelContainer>
-                <InnerBorderContainer>
-                    <Panel>
-                        <DigitContainer>{bombCounter}</DigitContainer>
-                        {smileButton}
-                        <DigitContainer>{timer}</DigitContainer>
-                    </Panel>
-                </InnerBorderContainer>
-            </PanelContainer>
+        <OuterBorderContainer>
+            <Content>
+                <PanelContainer>
+                    <InnerBorderContainer>
+                        <Panel>
+                            <DigitContainer>{bombCounter}</DigitContainer>
+                            <PanelElementContainer>
+                                <OuterBorderContainer>
+                                    {smileButton}
+                                </OuterBorderContainer>
+                            </PanelElementContainer>
+                            <DigitContainer>{timer}</DigitContainer>
+                        </Panel>
+                    </InnerBorderContainer>
+                </PanelContainer>
 
-            <InnerBorderContainer>{tiles}</InnerBorderContainer>
-        </Content>
+                <InnerBorderContainer>{tiles}</InnerBorderContainer>
+            </Content>
+        </OuterBorderContainer>
     );
 };
 

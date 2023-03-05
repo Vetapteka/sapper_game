@@ -7,7 +7,12 @@ declare module 'styled-components' {
             primary: string;
             secondary: string;
             background: string;
+            accent: string;
             text: string;
+        };
+        media: {
+            phone: string;
+            tablet: string;
         };
     }
 }

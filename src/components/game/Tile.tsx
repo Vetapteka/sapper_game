@@ -11,6 +11,7 @@ import sevenNumber from '../../assets/oldTheme/field/type7.svg';
 import eightNumber from '../../assets/oldTheme/field/type7.svg';
 import flag from '../../assets/oldTheme/flag.svg';
 import question from '../../assets/oldTheme/question.svg';
+import { TILE_SIZE_LARGE, TILE_SIZE_SMALL } from '../../styles/global';
 
 type TileOpenedRoleType = keyof typeof TileOpenedRole;
 type TileClosedRoleType = keyof typeof TileClosedRole;
@@ -35,8 +36,13 @@ export const TileClosedRole = {
 };
 
 const Content = styled.div`
-    width: 30px;
-    height: 30px;
+    width: ${TILE_SIZE_LARGE};
+    height: ${TILE_SIZE_LARGE};
+
+    @media ${(props) => props.theme.media.phone} {
+        height: ${TILE_SIZE_SMALL};
+        width: ${TILE_SIZE_SMALL};
+    }
 `;
 
 const Closed = styled.div<ClosedProps>`

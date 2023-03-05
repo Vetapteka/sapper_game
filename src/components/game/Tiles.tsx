@@ -4,12 +4,29 @@ import styled from 'styled-components';
 import { GameManager } from './tools/GameManager';
 import { GameSettings } from '../../gameSettings';
 import { ClickHandles } from './Game';
+import { TILE_SIZE_LARGE, TILE_SIZE_SMALL } from '../../styles/global';
 
-const Grid = styled.div`
+interface GridProps {
+    x: number;
+    y: number;
+}
+
+const Grid = styled.div<GridProps>`
     display: grid;
     margin: 0 auto;
-    grid-template-columns: repeat(16, 30px);
-    grid-template-rows: repeat(16, 30px);
+    grid-template-columns: repeat(${(props) => props.x}, ${TILE_SIZE_LARGE}px);
+    grid-template-rows: repeat(${(props) => props.y}, ${TILE_SIZE_LARGE}px);
+
+    @media ${(props) => props.theme.media.phone} {
+        grid-template-columns: repeat(
+            ${(props) => props.x},
+            ${TILE_SIZE_SMALL}px
+        );
+        grid-template-rows: repeat(
+            ${(props) => props.y},
+            ${TILE_SIZE_SMALL}px
+        );
+    }
 `;
 
 export interface TilesRef {
@@ -106,7 +123,6 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
                 const tile = getTileByIndex(index);
                 if (!tile.isBomb()) {
                     openedNoBombTilesRef.current++;
-                    
                 }
                 tile.open();
             });
@@ -127,6 +143,8 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
 
         return (
             <Grid
+                x={+fieldSettings.x}
+                y={+fieldSettings.y}
                 onMouseDown={clickHandles.handleMouseDown}
                 onMouseUp={clickHandles.handleMouseUp}
             >

@@ -20,15 +20,10 @@ interface SmileProps {
 }
 
 const Smile = styled.div<SmileProps>`
-    width: 50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
 
-    background-color: #bdbdbd;
-    border: 4px solid;
-    border-top-color: #f8f8f8;
-    border-left-color: #f8f8f8;
-    border-right-color: #7b7b7b;
-    border-bottom-color: #7b7b7b;
+    background-color: ${props=> props.theme.colors.primary};;
 
     background-image: url(${(props) => SmileRole[props.role]});
     background-repeat: no-repeat;

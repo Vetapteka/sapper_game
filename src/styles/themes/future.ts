@@ -1,10 +1,15 @@
 export default {
     title: 'future',
     colors: {
-        primary: 'green',
-        secondary: 'blue',
+        primary: 'lightgrey',
+        secondary: 'grey',
+        accent: '#f8f8f8',
+        background: 'white',
+        text: 'black',
+    },
 
-        background: 'lightgrey',
-        text: '#333'
+    media: {
+        phone: '(max-width: 425px)',
+        tablet: '(max-width: 768px) and (min-width: 425px)',
     },
 };

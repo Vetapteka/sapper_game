@@ -7,7 +7,4 @@ export const GlobalStyle = createGlobalStyle`
   box-sizing: border-box;
   font-family: 'Comfortaa', sans-serif;
   background-color: white;
-  &::selection{
-    background-color: yellow;
-  }
 }`;
