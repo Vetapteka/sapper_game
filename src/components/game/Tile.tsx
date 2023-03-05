@@ -86,6 +86,7 @@ export interface TileRef {
     open: () => void;
     close: () => void;
     isOpened: () => boolean;
+    isClosed: () => boolean;
     isBomb: () => boolean;
     getIndex: () => number;
     getRightClickCount: () => React.MutableRefObject<number>;
@@ -110,6 +111,7 @@ const Tile = forwardRef<TileRef, TileProps>(
             getIndex: () => data.index,
 
             isOpened: () => isOpened,
+            isClosed: () => !isOpened,
             isBomb: () => openedRole == '-1',
 
             open: () => setIsOpened(true),

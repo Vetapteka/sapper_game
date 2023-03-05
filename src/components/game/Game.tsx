@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import GameLayout from './GameLayout';
-import BombCounter from './BombCounter';
+import BombCounter, { BombCounterRef } from './BombCounter';
 import Timer, { TimerRef } from './Timer';
 import SmileButton, { SmileButtonRef } from './SmileButton';
 import Tiles, { TilesRef } from './Tiles';
@@ -23,9 +23,8 @@ export interface ClickHandles {
 const Game = () => {
     const timerRef = useRef<TimerRef>(null);
     const smileButtonRef = useRef<SmileButtonRef>(null);
+    const bombCounterRef = useRef<BombCounterRef>(null);
     const tilesRef = useRef<TilesRef>(null);
-
-    const [flagsCount, setFlagsCount] = useState(fieldSettings.bombCount);
 
     const isFirstClick = useRef(true);
 
@@ -46,19 +45,19 @@ const Game = () => {
 
         const tile = tilesRef.current?.getTileByClick(event);
 
-        if (tile && !tile.isOpened()) {
+        if (tile && tile.isClosed()) {
             const clickCountRef = tile.getRightClickCount();
             const clickCount = clickCountRef.current;
             if (clickCount == 0) {
                 tile.setTileClosedRole('flag');
                 clickCountRef.current++;
-                setFlagsCount((prev) => prev - 1);
+                bombCounterRef.current?.dec();
             } else if (clickCount == 1) {
                 tile.setTileClosedRole('question');
                 clickCountRef.current++;
             } else if (clickCount == 2) {
                 tile.setTileClosedRole('empty');
-                setFlagsCount((prev) => prev + 1);
+                bombCounterRef.current?.dec();
                 clickCountRef.current = 0;
             }
         }
@@ -99,6 +98,7 @@ const Game = () => {
         tilesRef.current?.resetTiles();
         isFirstClick.current = true;
         timerRef.current?.reset();
+        smileButtonRef.current?.setRole('default');
     };
 
     const clickHandles: ClickHandles = {
@@ -117,7 +117,12 @@ const Game = () => {
                     fieldSettings={fieldSettings}
                 />
             }
-            bombCounter={<BombCounter bombCount={flagsCount} />}
+            bombCounter={
+                <BombCounter
+                    ref={bombCounterRef}
+                    initialBombCount={fieldSettings.bombCount}
+                />
+            }
             timer={<Timer ref={timerRef} />}
             smileButton={
                 <SmileButton ref={smileButtonRef} handleClick={resetGame} />
