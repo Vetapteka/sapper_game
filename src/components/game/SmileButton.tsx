@@ -1,10 +1,10 @@
 import { useState, useImperativeHandle, forwardRef } from 'react';
 
 import styled from 'styled-components';
-import sad from '../../assets/mine.png';
-import happy from '../../assets/1.png';
-import sunglasses from '../../assets/2.png';
-import wonder from '../../assets/3.png';
+import sad from '../../assets/oldTheme/smile/sad.svg';
+import happy from '../../assets/oldTheme/smile/happy.svg';
+import sunglasses from '../../assets/oldTheme/smile/sunglasses.svg';
+import wonder from '../../assets/oldTheme/smile/wonder.svg';
 
 type SmileRoleType = keyof typeof SmileRole;
 

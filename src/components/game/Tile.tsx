@@ -1,15 +1,16 @@
 import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
-import mineImage from '../../assets/mine.png';
-import oneNumber from '../../assets/1.png';
-import twoNumber from '../../assets/2.png';
-import threeNumber from '../../assets/3.png';
-import fourNumber from '../../assets/4.png';
-import fiveNumber from '../../assets/5.png';
-import sixNumber from '../../assets/6.png';
-import sevenNumber from '../../assets/7.png';
-import flag from '../../assets/flag.png';
-import question from '../../assets/question.png';
+import mineImage from '../../assets/oldTheme/mine.svg';
+import oneNumber from '../../assets/oldTheme/field/type1.svg';
+import twoNumber from '../../assets/oldTheme/field/type2.svg';
+import threeNumber from '../../assets/oldTheme/field/type3.svg';
+import fourNumber from '../../assets/oldTheme/field/type4.svg';
+import fiveNumber from '../../assets/oldTheme/field/type5.svg';
+import sixNumber from '../../assets/oldTheme/field/type6.svg';
+import sevenNumber from '../../assets/oldTheme/field/type7.svg';
+import eightNumber from '../../assets/oldTheme/field/type7.svg';
+import flag from '../../assets/oldTheme/flag.svg';
+import question from '../../assets/oldTheme/question.svg';
 
 type TileOpenedRoleType = keyof typeof TileOpenedRole;
 type TileClosedRoleType = keyof typeof TileClosedRole;
@@ -24,6 +25,7 @@ export const TileOpenedRole = {
     '5': fiveNumber,
     '6': sixNumber,
     '7': sevenNumber,
+    '8': eightNumber,
 };
 
 export const TileClosedRole = {
