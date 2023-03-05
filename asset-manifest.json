@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/sapper_game/static/js/main.9ee508f4.js",
+    "main.js": "/sapper_game/static/js/main.0f11fb03.js",
     "static/media/sad.svg": "/sapper_game/static/media/sad.75c456eac40aff5f8d3678d920fb1e3b.svg",
     "static/media/sunglasses.svg": "/sapper_game/static/media/sunglasses.b4df9fad8e7ab623ec5f1b5c534845dc.svg",
     "static/media/wonder.svg": "/sapper_game/static/media/wonder.243d07b4af2c3ee98e7b76e9d19df830.svg",
@@ -26,9 +26,9 @@
     "static/media/type7.svg": "/sapper_game/static/media/type7.bef011454f98aaedc4b4ee20068c2a97.svg",
     "static/media/type1.svg": "/sapper_game/static/media/type1.538df5cfb94d802d3826fce668c521f1.svg",
     "index.html": "/sapper_game/index.html",
-    "main.9ee508f4.js.map": "/sapper_game/static/js/main.9ee508f4.js.map"
+    "main.0f11fb03.js.map": "/sapper_game/static/js/main.0f11fb03.js.map"
   },
   "entrypoints": [
-    "static/js/main.9ee508f4.js"
+    "static/js/main.0f11fb03.js"
   ]
 }
