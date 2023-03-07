@@ -4,7 +4,9 @@ export default {
         primary: 'lightgrey',
         secondary: 'grey',
         accent: '#f8f8f8',
+        tileBackground: "#bdbdbd",
         background: 'white',
+        error: 'red',
         text: 'black',
     },
 

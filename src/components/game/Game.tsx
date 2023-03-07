@@ -41,12 +41,15 @@ const Game = () => {
         if (tile && tile.isClosed()) {
             const clickCountRef = tile.getRightClickCount();
             const clickCount = clickCountRef.current;
+            
             if (clickCount == 0 && bombCounterRef.current?.isBombsExist()) {
                 tile.setTileClosedRole('flag');
+                tilesRef.current?.saveFlag(tile);
                 clickCountRef.current++;
                 bombCounterRef.current?.dec();
             } else if (clickCount == 1) {
                 tile.setTileClosedRole('question');
+                tilesRef.current?.removeFlag(tile);
                 clickCountRef.current++;
                 bombCounterRef.current?.inc();
             } else if (clickCount == 2) {
@@ -67,6 +70,7 @@ const Game = () => {
             tilesRef.current?.openDependentTiles(tile);
 
             if (tile.isBomb()) {
+                tile.setAccent();
                 loseGame();
             }
 
@@ -84,6 +88,7 @@ const Game = () => {
     };
 
     const loseGame = () => {
+        tilesRef.current?.showErrors();
         smileButtonRef.current?.setRole('sad');
         endGame();
     };

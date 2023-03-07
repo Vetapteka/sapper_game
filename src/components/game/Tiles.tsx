@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import Tile, { TileRef } from './Tile';
 import styled from 'styled-components';
 import { GameManager } from './tools/GameManager';
@@ -22,10 +22,7 @@ const Grid = styled.div<GridProps>`
             ${(props) => props.x},
             ${TILE_SIZE_SMALL}px
         );
-        grid-template-rows: repeat(
-            ${(props) => props.y},
-            ${TILE_SIZE_SMALL}px
-        );
+        grid-template-rows: repeat(${(props) => props.y}, ${TILE_SIZE_SMALL}px);
     }
 `;
 
@@ -35,6 +32,9 @@ export interface TilesRef {
     openDependentTiles: (tile: TileRef) => void;
     getTileByClick: (event: React.MouseEvent<HTMLDivElement>) => TileRef;
     isAllNoBombOpened: () => boolean;
+    showErrors: () => void;
+    saveFlag: (tile: TileRef) => void;
+    removeFlag: (tile: TileRef) => void;
 }
 
 interface TilesProps {
@@ -48,6 +48,7 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
         const gameManager = new GameManager(fieldSettings);
         const field = gameManager.getField();
         const openedNoBombTilesRef = useRef<number>(0);
+        const flags = new Set<TileRef>();
 
         const createTiles = () => {
             const tiles = [];
@@ -79,8 +80,14 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
                 tile.close();
                 tile.setTileClosedRole('empty');
                 tile.setTileOpenedRole('0');
+                tile.removeAccent();
+
+                const clickCountRef = tile.getRightClickCount();
+                clickCountRef.current = 0;
             });
             openedNoBombTilesRef.current = 0;
+            flags.clear();
+            console.log(flags);
         };
 
         const initTiles = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -133,12 +140,22 @@ const Tiles = forwardRef<TilesRef, TilesProps>(
         const isAllNoBombOpened = (): boolean =>
             openedNoBombTilesRef.current == tileCount - fieldSettings.bombCount;
 
+        const showErrors = () => {
+            flags.forEach((tile) => tile.setTileClosedRole('crossedFlag'));
+        };
+
+        const saveFlag = (tile: TileRef) => flags.add(tile);
+        const removeFlag = (tile: TileRef) => flags.delete(tile);
+
         useImperativeHandle(ref, () => ({
             initTiles,
             resetTiles,
             openDependentTiles,
             getTileByClick,
             isAllNoBombOpened,
+            showErrors,
+            saveFlag,
+            removeFlag,
         }));
 
         return (

@@ -10,6 +10,7 @@ import sixNumber from '../../assets/oldTheme/field/type6.svg';
 import sevenNumber from '../../assets/oldTheme/field/type7.svg';
 import eightNumber from '../../assets/oldTheme/field/type7.svg';
 import flag from '../../assets/oldTheme/flag.svg';
+import crossedFlag from '../../assets/oldTheme/crossed_flag.svg';
 import question from '../../assets/oldTheme/question.svg';
 import { TILE_SIZE_LARGE, TILE_SIZE_SMALL } from '../../styles/global';
 
@@ -32,6 +33,7 @@ export const TileOpenedRole = {
 export const TileClosedRole = {
     question: question,
     flag: flag,
+    crossedFlag: crossedFlag,
     empty: null,
 };
 
@@ -74,12 +76,16 @@ interface ClosedProps {
 
 interface OpenedProps {
     openedRole: TileOpenedRoleType;
+    isAccentuated: boolean;
 }
 
 const Open = styled.div<OpenedProps>`
     width: 100%;
     height: 100%;
-    background-color: #bdbdbd;
+    background-color: ${(props) =>
+        props.isAccentuated
+            ? props.theme.colors.error
+            : props.theme.colors.tileBackground};
     border: 1px solid #7b7b7b;
     background-image: url(${(props) => TileOpenedRole[props.openedRole]});
     background-repeat: no-repeat;
@@ -110,6 +116,9 @@ export interface TileRef {
 
     setTileOpenedRole: (role: TileOpenedRoleType) => void;
     setTileClosedRole: (role: TileClosedRoleType) => void;
+
+    setAccent: () => void;
+    removeAccent: () => void;
 }
 
 const Tile = forwardRef<TileRef, TileProps>(
@@ -121,6 +130,7 @@ const Tile = forwardRef<TileRef, TileProps>(
         const [closedRole, setClosedRole] = useState<TileClosedRoleType>(
             data.closedRole
         );
+        const [isAccentuated, setIsAccentuated] = useState(false);
 
         const rightClickCount = useRef(0);
 
@@ -140,12 +150,18 @@ const Tile = forwardRef<TileRef, TileProps>(
 
             setTileOpenedRole: (role) => setOpenedRole(role),
             setTileClosedRole: (role) => setClosedRole(role),
+            setAccent: () => setIsAccentuated(true),
+            removeAccent: () => setIsAccentuated(false),
         }));
 
         return (
             <Content onClick={onLeftClick} onContextMenu={onRightClick}>
                 {isOpened ? (
-                    <Open data-index={data.index} openedRole={openedRole} />
+                    <Open
+                        isAccentuated={isAccentuated}
+                        data-index={data.index}
+                        openedRole={openedRole}
+                    />
                 ) : (
                     <Closed data-index={data.index} closedRole={closedRole} />
                 )}
