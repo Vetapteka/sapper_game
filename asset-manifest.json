@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/sapper_game/static/js/main.c0585fb1.js",
+    "main.js": "/sapper_game/static/js/main.e8826db9.js",
     "static/media/sad.svg": "/sapper_game/static/media/sad.75c456eac40aff5f8d3678d920fb1e3b.svg",
     "static/media/sunglasses.svg": "/sapper_game/static/media/sunglasses.b4df9fad8e7ab623ec5f1b5c534845dc.svg",
     "static/media/wonder.svg": "/sapper_game/static/media/wonder.243d07b4af2c3ee98e7b76e9d19df830.svg",
@@ -20,16 +20,16 @@
     "static/media/type2.svg": "/sapper_game/static/media/type2.143789f841cf6b3621c63ce960ef6bef.svg",
     "static/media/type6.svg": "/sapper_game/static/media/type6.0b026f2de7c640b9846ccfccdc8dc4e1.svg",
     "static/media/question.svg": "/sapper_game/static/media/question.09f5e91d3280de875f24648d3150a8cf.svg",
-    "static/media/crossed_flag.svg": "/sapper_game/static/media/crossed_flag.a7c1e47963d534b9873d34ca3bf07f99.svg",
+    "static/media/crossed_flag.svg": "/sapper_game/static/media/crossed_flag.6d83005ae2d5c3364ac758b87731b32e.svg",
     "static/media/type5.svg": "/sapper_game/static/media/type5.731ad9bba1796fcb916ffe77c6b65c4e.svg",
     "static/media/flag.svg": "/sapper_game/static/media/flag.4919e3a0421f0ebfa25dc2a3c6c06fa8.svg",
     "static/media/type4.svg": "/sapper_game/static/media/type4.ed7b4ce2ccd55d95dfd0762fda058447.svg",
     "static/media/type7.svg": "/sapper_game/static/media/type7.bef011454f98aaedc4b4ee20068c2a97.svg",
     "static/media/type1.svg": "/sapper_game/static/media/type1.538df5cfb94d802d3826fce668c521f1.svg",
     "index.html": "/sapper_game/index.html",
-    "main.c0585fb1.js.map": "/sapper_game/static/js/main.c0585fb1.js.map"
+    "main.e8826db9.js.map": "/sapper_game/static/js/main.e8826db9.js.map"
   },
   "entrypoints": [
-    "static/js/main.c0585fb1.js"
+    "static/js/main.e8826db9.js"
   ]
 }
